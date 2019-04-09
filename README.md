@@ -1,2 +1,2 @@
 # closet
-Multipurpose
+multipurpose storage for personal usage

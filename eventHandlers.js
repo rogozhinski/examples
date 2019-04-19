@@ -2,13 +2,14 @@ document.addEventListener('click', e => {
 
     const target = e.target;
 
-    if (target.className.includes('login')){
+    if (target.id.includes('login-button')){
+
+        loginValue = document.getElementById("login-input").value;
+        passwordValue = document.getElementById("password-input").value;
 
         toSell = {
-            authform: {
-                login: 'login1',
-                password: 'password1'
-            }
+            login: "login1",
+            password: "password1"
         }
 
         window.fetch("http://localhost:9999/auth",{
@@ -16,17 +17,15 @@ document.addEventListener('click', e => {
             headers: {
                 'Content-Type': 'application/json'
                 },
-            mode: 'no-cors',
             body: JSON.stringify(toSell)
-        });
-
+        }).then((response) => {return response.text()})
+        .then((text) => {console.log(text)})
     };
 
-    if (target.className.includes('logout')){
+    if (target.id.includes('logout-button')){
         
         window.fetch("http://localhost:9999/logout",{
             method: 'GET',
-            mode: 'no-cors',
         });  
     }
   

@@ -1,0 +1,20 @@
+FROM pytorch/pytorch:1.10.0-cuda11.3-cudnn8-runtime
+
+RUN apt-get -y update 
+RUN apt-get -y upgrade 
+RUN apt-get -y install curl 
+RUN apt-get -y install wget 
+RUN apt-get -y install git
+
+EXPOSE 8888
+
+RUN pip install --upgrade pip setuptools wheel
+RUN pip install opencv-contrib-python
+RUN pip install jupyterlab
+
+ARG USERNAME=regular_user
+ARG UID=1000
+ARG GID=$UID
+RUN groupadd --gid $GID $USERNAME
+RUN useradd --uid=$UID --gid $GID -m $USERNAME 
+USER $USERNAME

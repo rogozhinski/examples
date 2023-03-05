@@ -1,0 +1,35 @@
+FROM pytorch/pytorch:1.9.0-cuda10.2-cudnn7-runtime
+
+ARG USER=sat
+ARG UID=1000
+ARG GID=1000
+ARG PW="link!49"
+
+RUN useradd -m ${USER} --uid=${UID} && echo "${USER}:${PW}" | chpasswd
+
+RUN apt-get -y update && apt-get -y upgrade && apt-get -y install curl && apt-get -y install wget && apt-get -y install git && apt-get -y install automake && apt-get install -y sudo && adduser ${USER} sudo
+
+RUN apt-get install -y openssh-server && apt install -y tmux && apt-get -y install bison flex && apt-cache search pcre && apt-get -y install net-tools && apt-get -y install nmap
+RUN apt-get -y install libpcre3 libpcre3-dev && apt-get -y install iputils-ping
+
+RUN mkdir /var/run/sshd
+RUN echo 'root:pass' | chpasswd
+RUN sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
+
+ENV NOTVISIBLE "in users profile"
+RUN echo "export VISIBLE=now" >> /etc/profile
+CMD ["/usr/sbin/sshd", "-D"]
+
+RUN pip install --upgrade pip setuptools wheel
+RUN pip install tensorboardx
+RUN pip install albumentations
+RUN pip install pycuda
+RUN pip install seaborn
+RUN pip install opencv-contrib-python
+
+RUN mkdir /workspace/mlflow
+RUN mkdir /workspace/airflow
+RUN pip install mlflow
+RUN pip install airflow
+RUN pip install jupyterlab

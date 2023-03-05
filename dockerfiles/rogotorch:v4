@@ -1,0 +1,14 @@
+FROM pytorch/pytorch:1.10.0-cuda11.3-cudnn8-runtime
+
+RUN apt-get -y update 
+RUN apt-get -y upgrade 
+RUN apt-get -y install curl 
+RUN apt-get -y install wget 
+RUN apt-get -y install git
+
+EXPOSE 8888
+
+RUN pip install --upgrade pip setuptools wheel
+RUN pip install opencv-contrib-python
+RUN pip install jupyterlab
+
